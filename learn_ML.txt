@@ -1,0 +1,38 @@
+Basics
+* https://www.youtube.com/playlist?list=PLd1MtXnMe1Bt_QyShP3zt0cg-_CPAlLos (~1.5 hours)
+* https://youtu.be/i_LwzRVP7bg (~4 hours)
+* What is machine learning
+* Data preprocessing
+* Supervised vs unsupervised learning
+* Regression vs classification tasks
+* Overfitting/underfitting
+* Model evaluation/metrics (ex accuracy, precision, recall, F1 score, ROC, AUC)
+* (Can maybe skip and dive right into neural networks, but these are fundamental ML algorithms to know):
+    * Linear regression/logistic regression
+    * Support Vector Machines
+    * Decision trees (ex random forest)
+    * Dimensionality reduction (ex PCA)
+    * Clustering (ex K nearest neighbors)
+
+Neural networks
+* https://www.youtube.com/watch?v=VyWAvY2CF9c (~1.5 hours)
+* Basics (ex nodes/weights/bias, what is an activation function, layers, etc)
+* Perceptron/multilayer perceptron
+* Hidden layers/deep neural networks
+* Activation functions (ex sigmoid, tanh, relu, leaky relu)
+* Loss functions (ex RMSE/cross entropy)
+* Model training (forward pass/backpropagation/gradient descent)
+
+Deep learning for image classification
+* Convolutional neural network (ex convolutional layers, pooling, filters, stride, etc)
+* UNet
+* ResNet
+* ImageNet
+* Transfer learning
+* RadImageNet
+
+Other resources
+* (New) Coursera specialization by Andrew Ng: https://www.coursera.org/specializations/machine-learning-introduction
+* Mathematics of Neural Networks: https://www.youtube.com/watch?v=Ixl3nykKG9M (~5 hours)
+* Implementing neural network/backprop from scratch in Python: https://www.youtube.com/watch?v=VMj-3S1tku0 (~2.5 hours)
+* Book: Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow
