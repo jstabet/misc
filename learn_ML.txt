@@ -33,6 +33,21 @@ Deep learning for image classification
 
 Other resources
 * (New) Coursera specialization by Andrew Ng: https://www.coursera.org/specializations/machine-learning-introduction
-* Mathematics of Neural Networks: https://www.youtube.com/watch?v=Ixl3nykKG9M (~5 hours)
 * Implementing neural network/backprop from scratch in Python: https://www.youtube.com/watch?v=VMj-3S1tku0 (~2.5 hours)
-* Book: Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow
+* Books
+   * Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow
+   * Deep Learning (Ian Goodfellow et al): https://www.deeplearningbook.org/
+   * Neural Networks and Deep Learning: http://neuralnetworksanddeeplearning.com/index.html
+
+Mathematics for ML:
+* Mathematics of Neural Networks: https://www.youtube.com/watch?v=Ixl3nykKG9M (~5 hours)
+* Coursera specialization: https://www.coursera.org/specializations/mathematics-machine-learning
+* Linear Algebra
+   * 3Blue1Brown: https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab
+   * Linear Algebra Done Right: https://www.youtube.com/playlist?list=PLGAnmvB9m7zOBVCZBUUmSinFV0wEir2Vw
+   * Khan Academy: https://www.khanacademy.org/math/linear-algebra
+   * Gilbert Strang Textbook: https://math.mit.edu/~gs/linearalgebra/
+   * Gilbert Strang Lectures: https://www.youtube.com/playlist?list=PL49CF3715CB9EF31D
+   * Introduction to Applied Linear Algebra: https://web.stanford.edu/~boyd/vmls/
+* Books
+   * Mathematics for Machine Learning: https://mml-book.github.io/
