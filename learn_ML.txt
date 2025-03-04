@@ -51,3 +51,6 @@ Mathematics for ML:
    * Introduction to Applied Linear Algebra: https://web.stanford.edu/~boyd/vmls/
 * Books
    * Mathematics for Machine Learning: https://mml-book.github.io/
+
+Python:
+* Kaggle: https://www.kaggle.com/learn/python
