@@ -178,16 +178,6 @@ else
     alias gpu="conda activate test_gpu && python ~/Software/misc/gpu.py && conda deactivate"
 fi
 
-#######################################
-# xdg-open alias/macOS 'open' command #
-#######################################
-# only add alias if command does not exsist
-if command -v open &> /dev/null; then
-    echo "Error: the 'open' command already exsists. Did not overwrite with custom command."
-else
-    alias open="xdg-open"
-fi
-
 ##################################
 # open vs code and exit terminal #
 ##################################
