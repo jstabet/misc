@@ -37,7 +37,7 @@ custom_conda_rmv() {
 
 # only add alias if command does not exsist
 if command -v condarmv &> /dev/null; then
-    echo "Error: the 'condarmv' command already exsists. Did not overwrite with custom function."
+    echo "Error: the 'condarmv' command already exsists. Did not overwrite with custom command."
 else 
     alias condarmv="custom_conda_rmv"
 fi
@@ -101,7 +101,7 @@ custom_git_status() {
 
 # only add alias if command does not exsist
 if command -v gss &> /dev/null; then
-    echo "Error: the 'gss' command already exsists. Did not overwrite with custom function."
+    echo "Error: the 'gss' command already exsists. Did not overwrite with custom command."
 else
     alias gss="custom_git_status"
 fi
@@ -153,7 +153,7 @@ custom_git_ignore() {
 
 # only add alias if command does not exsist
 if command -v gig &> /dev/null; then
-    echo "Error: the 'gig' command already exsists. Did not overwrite with custom function."
+    echo "Error: the 'gig' command already exsists. Did not overwrite with custom command."
 else
     alias gig="custom_git_ignore"
 fi
@@ -163,7 +163,7 @@ fi
 #######################################
 # only add alias if command does not exsist
 if command -v update &> /dev/null; then
-    echo "Error: the 'update' command already exsists. Did not overwrite with custom function."
+    echo "Error: the 'update' command already exsists. Did not overwrite with custom command."
 else
     alias update="sudo apt update && sudo apt upgrade && sudo apt autoremove && sudo apt autoclean"
 fi
@@ -173,7 +173,7 @@ fi
 ####################
 # only add alias if command does not exsist
 if command -v gpu &> /dev/null; then
-    echo "Error: the 'gpu' command already exsists. Did not overwrite with custom function."
+    echo "Error: the 'gpu' command already exsists. Did not overwrite with custom command."
 else
     alias gpu="conda activate test_gpu && python ~/Software/misc/gpu.py && conda deactivate"
 fi
@@ -183,7 +183,67 @@ fi
 #######################################
 # only add alias if command does not exsist
 if command -v open &> /dev/null; then
-    echo "Error: the 'open' command already exsists. Did not overwrite with custom function."
+    echo "Error: the 'open' command already exsists. Did not overwrite with custom command."
 else
     alias open="xdg-open"
+fi
+
+##################################
+# open vs code and exit terminal #
+##################################
+# only add alias if command does not exsist
+if command -v codee &> /dev/null; then
+    echo "Error: the 'codee' command already exsists. Did not overwrite with custom command."
+else
+    alias codee="code . ; exit"
+fi
+
+#####################################
+# update rclone onedrive config PAT #
+#####################################
+# TODO: close chrome window/tab after opening, 2 clicks + if 2 clicks fails (ie need to log in first) default to wait until Enter is pressed
+custom_update_onedrive() {
+	# Open Microsoft Graph Explorer
+	google-chrome https://developer.microsoft.com/en-us/graph/graph-explorer &> /dev/null
+
+	# # 2 clicks --> WIP
+	# # Get mouse id for xinput
+	# MOUSE_NAME=$(xinput list --name-only | grep -i mouse | head -n 1)
+	# MOUSE_ID=$(xinput list --id-only "$MOUSE_NAME")
+	# # Wait for 2 clicks
+	# CLICK_COUNT=0
+	# xinput test "$MOUSE_ID" | while read -r line; do
+	#     if [[ "$line" == "button press   1" ]]; then
+	#         ((CLICK_COUNT++))
+	#         if [[ $CLICK_COUNT -eq 2 ]]; then
+	#             pkill -P $$ xinput  # stop the background listener
+	#             break
+	#         fi
+	#     fi
+	# done
+	# NEW_PAT=$(xclip -o)
+	# echo NEW_PAT
+
+	# Wait until PAT has been copied
+	read -p "Copy PAT then press Enter..."
+
+	# Store PAT from clipboard
+	NEW_PAT=$(xclip -o)
+
+	# Update rclone config with new PAT
+	rclone config update onedrive token "{\"access_token\":\"$NEW_PAT\"}" > /dev/null
+
+	# Check if update was successful
+	if rclone lsd onedrive: &> /dev/null; then
+	    echo "rclone update successful!"
+	else
+	    echo "Error: rclone update unsuccessful (OneDrive access failed)."
+	fi
+}
+
+# only add alias if command does not exsist
+if command -v pat &> /dev/null; then
+    echo "Error: the 'pat' command already exsists. Did not overwrite with custom command."
+else
+    alias pat="custom_update_onedrive"
 fi
