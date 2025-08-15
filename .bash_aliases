@@ -2,6 +2,14 @@
 ### CUSTOM COMMANDS ###
 #######################
 
+# R no save
+alias R='R --no-save'
+
+# create new firefox profile called "lofi" and update path to profile
+# go to autoplay settings and set default to "allow audio and video"
+alias lofi='firefox --headless --new-instance --profile ~/snap/firefox/common/.mozilla/firefox/qoeha4hg.lofi --private-window "https://www.youtube.com/watch?v=jfKfPfyJRdk" & exit'
+alias klofi='pkill -f "firefox.*qoeha4hg.lofi" & exit'
+
 ####################
 # remove conda env #
 ####################
@@ -18,7 +26,8 @@ custom_conda_rmv() {
     conda activate "$ENV_NAME" || return 1
 
     # Confirmation
-    read -p "Confirm remove $ENV_NAME? (y/n): " confirmation
+    echo -n "Confirm remove $ENV_NAME? (y/n): "
+    read confirmation
     if [[ ! "$confirmation" =~ ^[Yy]$ ]]; then
         echo "Operation canceled. Environment '$ENV_NAME' was not removed."
         return 0
@@ -35,11 +44,11 @@ custom_conda_rmv() {
     echo "Environment $ENV_NAME removed."
 }
 
-# only add alias if command does not exsist
-if command -v condarmv &> /dev/null; then
-    echo "Error: the 'condarmv' command already exsists. Did not overwrite with custom command."
+# only add alias if command does not exist
+if command -v crm &> /dev/null; then
+    echo "Error: the 'crm' command already exists. Did not overwrite with custom command."
 else 
-    alias condarmv="custom_conda_rmv"
+    alias crm="custom_conda_rmv"
 fi
 
 #######################################
@@ -99,9 +108,9 @@ custom_git_status() {
     done
 }
 
-# only add alias if command does not exsist
+# only add alias if command does not exist
 if command -v gss &> /dev/null; then
-    echo "Error: the 'gss' command already exsists. Did not overwrite with custom command."
+    echo "Error: the 'gss' command already exists. Did not overwrite with custom command."
 else
     alias gss="custom_git_status"
 fi
@@ -151,9 +160,9 @@ custom_git_ignore() {
     echo -e "$ignored_files" | sed 's/^/\t/'
 }
 
-# only add alias if command does not exsist
+# only add alias if command does not exist
 if command -v gig &> /dev/null; then
-    echo "Error: the 'gig' command already exsists. Did not overwrite with custom command."
+    echo "Error: the 'gig' command already exists. Did not overwrite with custom command."
 else
     alias gig="custom_git_ignore"
 fi
@@ -161,9 +170,9 @@ fi
 #######################################
 # update/upgrade/autoremove/autoclean #
 #######################################
-# only add alias if command does not exsist
+# only add alias if command does not exist
 if command -v update &> /dev/null; then
-    echo "Error: the 'update' command already exsists. Did not overwrite with custom command."
+    echo "Error: the 'update' command already exists. Did not overwrite with custom command."
 else
     alias update="sudo apt update && sudo apt upgrade && sudo apt autoremove && sudo apt autoclean"
 fi
@@ -171,19 +180,19 @@ fi
 ####################
 # check gpu status #
 ####################
-# only add alias if command does not exsist
+# only add alias if command does not exist
 if command -v gpu &> /dev/null; then
-    echo "Error: the 'gpu' command already exsists. Did not overwrite with custom command."
+    echo "Error: the 'gpu' command already exists. Did not overwrite with custom command."
 else
-    alias gpu="conda activate test_gpu && python ~/Software/misc/gpu.py && conda deactivate"
+    alias gpu="conda activate test_gpu && python ~/Software/test_gpu/src/gpu.py && conda deactivate"
 fi
 
 ##################################
 # open vs code and exit terminal #
 ##################################
-# only add alias if command does not exsist
+# only add alias if command does not exist
 if command -v codee &> /dev/null; then
-    echo "Error: the 'codee' command already exsists. Did not overwrite with custom command."
+    echo "Error: the 'codee' command already exists. Did not overwrite with custom command."
 else
     alias codee="code . ; exit"
 fi
@@ -192,9 +201,11 @@ fi
 # update rclone onedrive config PAT #
 #####################################
 # TODO: close chrome window/tab after opening, 2 clicks + if 2 clicks fails (ie need to log in first) default to wait until Enter is pressed
+# TODO: update PAT for all remote drive (`rclone listremotes`, get name/details with `rclone config show XXX`)
+# TODO: expand rclone_drive_id.py as terminal command
 custom_update_onedrive() {
 	# Open Microsoft Graph Explorer
-	google-chrome https://developer.microsoft.com/en-us/graph/graph-explorer &> /dev/null
+	open https://developer.microsoft.com/en-us/graph/graph-explorer
 
 	# # 2 clicks --> WIP
 	# # Get mouse id for xinput
@@ -231,9 +242,9 @@ custom_update_onedrive() {
 	fi
 }
 
-# only add alias if command does not exsist
+# only add alias if command does not exist
 if command -v pat &> /dev/null; then
-    echo "Error: the 'pat' command already exsists. Did not overwrite with custom command."
+    echo "Error: the 'pat' command already exists. Did not overwrite with custom command."
 else
     alias pat="custom_update_onedrive"
 fi
