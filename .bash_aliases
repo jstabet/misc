@@ -5,10 +5,82 @@
 # R no save
 alias R='R --no-save'
 
-# create new firefox profile called "lofi" and update path to profile
-# go to autoplay settings and set default to "allow audio and video"
-alias lofi='firefox --headless --new-instance --profile ~/snap/firefox/common/.mozilla/firefox/qoeha4hg.lofi --private-window "https://www.youtube.com/watch?v=jfKfPfyJRdk" & exit'
-alias klofi='pkill -f "firefox.*qoeha4hg.lofi" & exit'
+########
+# lofi #
+########
+# must go to autoplay settings and set default to "allow audio and video"
+# find/create Firefox lofi profile
+_lofi_profile() {
+    # find lofi profiles
+    PROFILE_MATCHES=( $(ls -d "$HOME"/snap/firefox/common/.mozilla/firefox/*.lofi 2>/dev/null) )
+
+    # if no matches, create profile and generate match list again
+    if (( ${#PROFILE_MATCHES[@]} == 0 )); then
+        echo "No Firefox lofi profile found, creating one..."
+        firefox -CreateProfile lofi >/dev/null 2>&1
+        PROFILE_MATCHES=( $(ls -d "$HOME"/snap/firefox/common/.mozilla/firefox/*.lofi 2>/dev/null) )
+    fi
+
+    # return match, or return error if there are (still) no matches or multiple matches
+    if (( ${#PROFILE_MATCHES[@]} == 0 )); then
+        echo "Error: could not create/find Firefox lofi profile."
+        return 1
+    elif (( ${#PROFILE_MATCHES[@]} > 1 )); then
+        echo "Error: multiple Firefox lofi profiles found."
+        return 1
+    else
+        PROFILE="${PROFILE_MATCHES[0]}"
+        echo "$PROFILE"
+    fi
+}
+
+# start lofi
+start_lofi() {
+    # get lofi profile path
+    PROFILE="$(_lofi_profile)" || return 1
+
+    # lofi url
+    LOFI_URL="https://www.youtube.com/watch?v=jfKfPfyJRdk"
+
+    # launch headless incognito window that plays lofi url
+    firefox --headless --new-instance --profile "$PROFILE" --private-window "$LOFI_URL" &>/dev/null & disown
+}
+
+# only add alias if command does not exist
+if command -v lofi &> /dev/null; then
+    echo "Error: the 'lofi' command already exists. Did not overwrite with custom command."
+else
+    alias lofi="start_lofi"
+fi
+
+# stop lofi
+stop_lofi() {
+    PROFILE="$(_lofi_profile)" || return 1
+
+    if pkill -f -- "--profile $PROFILE"; then
+        echo "Stopped Firefox using lofi profile: $PROFILE"
+    else
+        echo "No Firefox processes using lofi profile found."
+    fi
+}
+
+stop_lofi() {
+    # get lofi profile path
+    PROFILE="$(_lofi_profile)" || return 1
+
+    # try to kill all instances of Firefox lofi profile
+    if ! pkill -f -- "--profile $PROFILE"; then
+        echo "No Firefox processes using lofi profile found."
+        return 1
+    fi
+}
+
+# only add alias if command does not exist
+if command -v klofi &> /dev/null; then
+    echo "Error: the 'klofi' command already exists. Did not overwrite with custom command."
+else
+    alias klofi="stop_lofi"
+fi
 
 ####################
 # remove conda env #
