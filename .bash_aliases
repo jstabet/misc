@@ -2,84 +2,70 @@
 ### CUSTOM COMMANDS ###
 #######################
 
-# R no save
-alias R='R --no-save'
+#################################
+# move .bash_aliases for github #
+#################################
+# TODO: check for misc repo and clone if not on desktop
+# TODO: check for differences before copying
+alias tl="cp ~/Software/misc/.bash_aliases ~"
+alias tg="cp ~/.bash_aliases ~/Software/misc/.bash_aliases"
+
+####################
+# nano/source bash #
+####################
+alias nbp="nano ~/.bash_aliases"
+alias sbp="source ~/.bashrc"
+
+#############
+# R no save #
+#############
+alias R="R --no-save"
 
 ########
 # lofi #
 ########
-# must go to autoplay settings and set default to "allow audio and video"
-# find/create Firefox lofi profile
-_lofi_profile() {
-    # find lofi profiles
-    PROFILE_MATCHES=( $(ls -d "$HOME"/snap/firefox/common/.mozilla/firefox/*.lofi 2>/dev/null) )
-
-    # if no matches, create profile and generate match list again
-    if (( ${#PROFILE_MATCHES[@]} == 0 )); then
-        echo "No Firefox lofi profile found, creating one..."
-        firefox -CreateProfile lofi >/dev/null 2>&1
-        PROFILE_MATCHES=( $(ls -d "$HOME"/snap/firefox/common/.mozilla/firefox/*.lofi 2>/dev/null) )
+toggle_lofi() {
+    # check status only
+    if [[ "$1" == "status" || "$1" == "--status" || "$1" == "-s" ]]; then
+        if pgrep -f -- "mpv .*lofi-mpv" >/dev/null; then
+            echo "lofi is running"
+            return 0
+        else
+            echo "lofi is not running"
+            return 1
+        fi
     fi
 
-    # return match, or return error if there are (still) no matches or multiple matches
-    if (( ${#PROFILE_MATCHES[@]} == 0 )); then
-        echo "Error: could not create/find Firefox lofi profile."
-        return 1
-    elif (( ${#PROFILE_MATCHES[@]} > 1 )); then
-        echo "Error: multiple Firefox lofi profiles found."
-        return 1
-    else
-        PROFILE="${PROFILE_MATCHES[0]}"
-        echo "$PROFILE"
+    # if running, stop
+    if pgrep -f -- "mpv .*lofi-mpv" >/dev/null; then
+        echo "Stopping lofi..."
+        pkill -f -- "mpv .*lofi-mpv" 2>/dev/null
+        return 0
     fi
-}
 
-# start lofi
-start_lofi() {
-    # get lofi profile path
-    PROFILE="$(_lofi_profile)" || return 1
-
+    # if not running, start
+    # check for mpv/mpv-mpris
+    if ! command -v mpv &> /dev/null; then
+        echo "'mpv' not found, installing mpv and mpv-mpris..."
+        sudo apt-get update && sudo apt-get install -y mpv mpv-mpris
+    fi
+    
     # lofi url
     LOFI_URL="https://www.youtube.com/watch?v=jfKfPfyJRdk"
 
-    # launch headless incognito window that plays lofi url
-    firefox --headless --new-instance --profile "$PROFILE" --private-window "$LOFI_URL" &>/dev/null & disown
+    # start playback
+    echo "Starting lofi..."
+    ( mpv --no-video --really-quiet --title="lofi-mpv" "$LOFI_URL" & ) &> /dev/null
+
+    # wait to return terminal to user, mpv takes a few seconds to start playing
+    sleep 2.5
 }
 
 # only add alias if command does not exist
 if command -v lofi &> /dev/null; then
     echo "Error: the 'lofi' command already exists. Did not overwrite with custom command."
 else
-    alias lofi="start_lofi"
-fi
-
-# stop lofi
-stop_lofi() {
-    PROFILE="$(_lofi_profile)" || return 1
-
-    if pkill -f -- "--profile $PROFILE"; then
-        echo "Stopped Firefox using lofi profile: $PROFILE"
-    else
-        echo "No Firefox processes using lofi profile found."
-    fi
-}
-
-stop_lofi() {
-    # get lofi profile path
-    PROFILE="$(_lofi_profile)" || return 1
-
-    # try to kill all instances of Firefox lofi profile
-    if ! pkill -f -- "--profile $PROFILE"; then
-        echo "No Firefox processes using lofi profile found."
-        return 1
-    fi
-}
-
-# only add alias if command does not exist
-if command -v klofi &> /dev/null; then
-    echo "Error: the 'klofi' command already exists. Did not overwrite with custom command."
-else
-    alias klofi="stop_lofi"
+    alias lofi="toggle_lofi"
 fi
 
 ####################
