@@ -3,6 +3,16 @@
 #######################
 
 #################################
+# vnc into gomezlab desktop gui #
+#################################
+# -f: allow for password entry
+# -o ExitOnForwardFailure=yes: only run if port is open
+# -L 5900:localhost:5900: forward local port 5900 to remote port 5900
+alias vnc='ssh -f -o ExitOnForwardFailure=yes -L 5900:localhost:5900 gomezlab \
+		"x11vnc -display :1 -auth /run/user/1000/gdm/Xauthority -localhost -once -timeout 60 -nopw" \
+		&& remmina -c vnc://localhost:5900'
+
+#################################
 # move .bash_aliases for github #
 #################################
 # TODO: check for misc repo and clone if not on desktop
