@@ -2,15 +2,43 @@
 ### CUSTOM COMMANDS ###
 #######################
 
-#################################
-# vnc into gomezlab desktop gui #
-#################################
-# -f: allow for password entry
-# -o ExitOnForwardFailure=yes: only run if port is open
-# -L 5900:localhost:5900: forward local port 5900 to remote port 5900
-alias vnc='ssh -f -o ExitOnForwardFailure=yes -L 5900:localhost:5900 gomezlab \
-		"x11vnc -display :1 -auth /run/user/1000/gdm/Xauthority -localhost -once -timeout 60 -nopw" \
-		&& remmina -c vnc://localhost:5900'
+###############################
+# vnc into ubuntu desktop gui #
+###############################
+start_vnc() {
+    if [ -z "$1" ]; then
+        echo "Usage: vnc <hostname>"
+        echo "Example: vnc gomezlab"
+        return 1
+    fi
+
+    # Check if remmina is installed locally
+    if ! command -v remmina &> /dev/null; then
+        echo "Error: remmina is not installed on this machine. Please install it first."
+        return 1
+    fi
+
+    HOST=$1
+    echo "Connecting to $HOST..."
+
+    # -f: allow for password entry
+    # -o ExitOnForwardFailure=yes: only run if port is open
+    # -L 5900:localhost:5900: forward local port 5900 to remote port 5900
+    ssh -f -o ExitOnForwardFailure=yes -L 5900:localhost:5900 "$HOST" "
+        echo 'Starting x11vnc server...'
+        x11vnc -display :1 -auth $XAUTHORITY -localhost -once -timeout 60 -nopw
+        "
+
+    # Launch remmina
+    remmina -c vnc://localhost:5900
+}
+
+# only add alias if command does not exist
+if command -v vnc &> /dev/null; then
+    echo "Error: the 'vnc' command already exists. Did not overwrite with custom command."
+else
+    alias vnc="start_vnc"
+fi
 
 #################################
 # move .bash_aliases for github #
