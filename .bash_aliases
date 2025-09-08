@@ -40,13 +40,42 @@ else
     alias vnc="start_vnc"
 fi
 
-#################################
-# move .bash_aliases for github #
-#################################
+######################
+# sync .bash_aliases #
+######################
 # TODO: check for misc repo and clone if not on desktop
-# TODO: check for differences before copying
-alias tl="cp ~/Software/misc/.bash_aliases ~"
+# TODO: use chezmoi instead?
+
+# copy github .bash_aliases to local
+tl() {
+    local GH=~/Software/misc/.bash_aliases
+    local LC=~/.bash_aliases
+
+    # if no local file yet, just copy
+    if [ ! -f "$LC" ]; then
+        echo "No local .bash_aliases file found. Copying $GH -> $LC"
+        cp "$GH" "$LC"
+        return
+    fi
+
+    # find lines present in local copy but NOT in github
+    local local_only=$(grep -Fxv -f "$GH" "$LC")
+    if [ -n "$local_only" ]; then
+        echo "Found local changes not in github:"
+        echo "$local_only"
+        echo
+        echo "Not copying. Review/merge into github first (ie 'tg')."
+        echo "If you want to force the copy anyway:  cp \"$GH\" \"$LC\""
+        return
+    fi
+
+    # copy github to local
+    cp "$GH" "$LC"
+}
+
+# copy local .bash_aliases to github
 alias tg="cp ~/.bash_aliases ~/Software/misc/.bash_aliases"
+
 
 ####################
 # nano/source bash #
