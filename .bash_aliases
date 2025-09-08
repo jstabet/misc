@@ -94,9 +94,6 @@ toggle_lofi() {
     # start playback
     echo "Starting lofi..."
     ( mpv --no-video --really-quiet --title="lofi-mpv" "$LOFI_URL" & ) &> /dev/null
-
-    # wait to return terminal to user, mpv takes a few seconds to start playing
-    sleep 2.5
 }
 
 # only add alias if command does not exist
