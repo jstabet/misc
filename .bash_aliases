@@ -117,8 +117,8 @@ toggle_lofi() {
         sudo apt-get update && sudo apt-get install -y mpv mpv-mpris
     fi
     
-    # lofi url
-    LOFI_URL="https://www.youtube.com/watch?v=jfKfPfyJRdk"
+    # lofi url (default is lofi girl)
+    LOFI_URL="${1:-https://www.youtube.com/watch?v=jfKfPfyJRdk}"
 
     # start playback
     echo "Starting lofi..."
