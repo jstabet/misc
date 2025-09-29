@@ -2,6 +2,29 @@
 ### CUSTOM COMMANDS ###
 #######################
 
+#########################
+# unmount rclone mounts #
+#########################
+unmount_rclone() {
+    for MNT in $(mount | grep rclone | awk '{print $3}'); do
+        echo -n "Unmount $MNT? (y/n): "
+        read confirmation
+        if [[ "$confirmation" =~ ^[Yy]$ ]]; then
+            echo "Unmounting..."
+            fusermount -u "$MNT"
+        else
+            echo "Skipping..."
+        fi
+    done
+}
+
+# only add alias if command does not exist
+if command -v urclone &> /dev/null; then
+    echo "Error: the 'urclone' command already exists. Did not overwrite with custom command."
+else
+    alias urclone="unmount_rclone"
+fi
+
 ###############################
 # vnc into ubuntu desktop gui #
 ###############################
