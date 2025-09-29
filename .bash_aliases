@@ -19,10 +19,10 @@ unmount_rclone() {
 }
 
 # only add alias if command does not exist
-if command -v urclone &> /dev/null; then
-    echo "Error: the 'urclone' command already exists. Did not overwrite with custom command."
+if command -v unmount &> /dev/null; then
+    echo "Error: the 'unmount' command already exists. Did not overwrite with custom command."
 else
-    alias urclone="unmount_rclone"
+    alias unmount="unmount_rclone"
 fi
 
 ###############################
@@ -114,6 +114,7 @@ alias R="R --no-save"
 ########
 # lofi #
 ########
+# NOTE: may need to upgrade yt-dlp with ```sudo apt -t noble-backports install yt-dlp```
 toggle_lofi() {
     # check status only
     if [[ "$1" == "status" || "$1" == "--status" || "$1" == "-s" ]]; then
@@ -142,6 +143,27 @@ toggle_lofi() {
     
     # lofi url (default is lofi girl)
     LOFI_URL="${1:-https://www.youtube.com/watch?v=jfKfPfyJRdk}"
+    
+    # Decide what to play
+    # If no args, default to lofi girl
+    if [[ -z "$1" ]]; then
+        LOFI_URL="https://www.youtube.com/watch?v=jfKfPfyJRdk"
+    
+    # If arg looks like a link, use that url
+    elif [[ "$1" =~ ^https?:// ]]; then
+        LOFI_URL="$1"
+    
+    # Otherwise search for terms and play first hit
+    else
+        echo "Searching YouTube for: $*"
+        VIDEO_ID=$(yt-dlp --quiet "ytsearch1:$*" --get-id --skip-download | head -n 1)
+        if [[ -n "$VIDEO_ID" ]]; then
+            LOFI_URL="https://www.youtube.com/watch?v=$VIDEO_ID"
+        else
+            echo "No results found for '$*'"
+            return 1
+        fi
+    fi
 
     # start playback
     echo "Starting lofi..."
