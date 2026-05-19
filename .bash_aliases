@@ -114,7 +114,12 @@ alias R="R --no-save"
 ########
 # lofi #
 ########
-# NOTE: may need to upgrade yt-dlp with ```sudo apt -t noble-backports install yt-dlp```
+# NOTE: may need to upgrade yt-dlp
+# can use backports: ```sudo apt -t noble-backports install yt-dlp```
+# or add PPA: https://github.com/yt-dlp/yt-dlp/wiki/Installation#apt
+# ```sudo add-apt-repository ppa:tomtomtom/yt-dlp    # Add ppa repo to apt```
+# ```sudo apt update                                 # Update package list```
+# ```sudo apt install yt-dlp                         # Install yt-dlp```
 toggle_lofi() {
     # check status only
     if [[ "$1" == "status" || "$1" == "--status" || "$1" == "-s" ]]; then
