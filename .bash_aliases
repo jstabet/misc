@@ -121,7 +121,14 @@ alias R="R --no-save"
 # ```sudo apt update                                 # Update package list```
 # ```sudo apt install yt-dlp                         # Install yt-dlp```
 toggle_lofi() {
-    # check status only
+    # debug flag (shift removes flag from args so normal parsing still works)
+    DEBUG=false
+    if [[ "$1" == "debug" || "$1" == "--debug" || "$1" == "-d" ]]; then
+        DEBUG=true
+        shift
+    fi
+
+    # check status flag
     if [[ "$1" == "status" || "$1" == "--status" || "$1" == "-s" ]]; then
         if pgrep -f -- "mpv .*lofi-mpv" >/dev/null; then
             echo "lofi is running"
@@ -147,19 +154,10 @@ toggle_lofi() {
     fi
     
     # lofi url (default is lofi girl)
-    LOFI_URL="${1:-https://www.youtube.com/watch?v=jfKfPfyJRdk}"
+    LOFI_URL="${1:-https://www.youtube.com/watch?v=EWrX250Zhko}"
     
-    # Decide what to play
-    # If no args, default to lofi girl
-    if [[ -z "$1" ]]; then
-        LOFI_URL="https://www.youtube.com/watch?v=jfKfPfyJRdk"
-    
-    # If arg looks like a link, use that url
-    elif [[ "$1" =~ ^https?:// ]]; then
-        LOFI_URL="$1"
-    
-    # Otherwise search for terms and play first hit
-    else
+    # if args exist and first arg is not a URL, search YouTube and play first hit
+    if [[ -n "$1" && ! "$1" =~ ^https?:// ]]; then
         echo "Searching YouTube for: $*"
         VIDEO_ID=$(yt-dlp --quiet "ytsearch1:$*" --get-id --skip-download | head -n 1)
         if [[ -n "$VIDEO_ID" ]]; then
@@ -172,7 +170,13 @@ toggle_lofi() {
 
     # start playback
     echo "Starting lofi..."
-    ( mpv --no-video --really-quiet --title="lofi-mpv" "$LOFI_URL" & ) &> /dev/null
+
+    if $DEBUG; then
+        echo "URL: $LOFI_URL"
+        mpv --no-video --title="lofi-mpv" "$LOFI_URL"
+    else
+        ( mpv --no-video --really-quiet --title="lofi-mpv" "$LOFI_URL" & ) &> /dev/null
+    fi
 }
 
 # only add alias if command does not exist
