@@ -153,8 +153,8 @@ toggle_lofi() {
         sudo apt-get update && sudo apt-get install -y mpv mpv-mpris
     fi
     
-    # lofi url (default is lofi girl)
-    LOFI_URL="${1:-https://www.youtube.com/watch?v=EWrX250Zhko}"
+    # lofi url (default is lofi girl live stream)
+    LOFI_URL="${1:-https://www.youtube.com/@LofiGirl/live}"
     
     # if args exist and first arg is not a URL, search YouTube and play first hit
     if [[ -n "$1" && ! "$1" =~ ^https?:// ]]; then
