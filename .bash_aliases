@@ -169,13 +169,14 @@ toggle_lofi() {
     fi
 
     # start playback
+    # --ytdl-format flag pulls highest audio+lowest video to avoid streaming issues (audio underrun)
     echo "Starting lofi..."
 
     if $DEBUG; then
         echo "URL: $LOFI_URL"
-        mpv --no-video --title="lofi-mpv" "$LOFI_URL"
+        mpv --no-video --ytdl-format='ba/b[height<=144]/b[height<=240]/b' --title="lofi-mpv" "$LOFI_URL"
     else
-        ( mpv --no-video --really-quiet --title="lofi-mpv" "$LOFI_URL" & ) &> /dev/null
+        ( mpv --no-video --really-quiet --ytdl-format='ba/b[height<=144]/b[height<=240]/b' --title="lofi-mpv" "$LOFI_URL" & ) &> /dev/null
     fi
 }
 
