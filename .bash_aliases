@@ -202,7 +202,7 @@ custom_conda_rmv() {
     conda activate "$ENV_NAME" || return 1
 
     # Confirmation
-    echo -n "Confirm remove $ENV_NAME? (y/n): "
+    echo -n "Confirm remove '$ENV_NAME'? (y/n): "
     read confirmation
     if [[ ! "$confirmation" =~ ^[Yy]$ ]]; then
         echo "Operation canceled. Environment '$ENV_NAME' was not removed."
@@ -218,7 +218,7 @@ custom_conda_rmv() {
     conda remove -n "$ENV_NAME" --all -y
 
     # -e allows for interpretation of '\n'
-    echo -e "\nEnvironment $ENV_NAME removed."
+    echo -e "\nEnvironment '$ENV_NAME' removed."
 }
 
 # only add alias if command does not exist
