@@ -217,7 +217,8 @@ custom_conda_rmv() {
     conda deactivate
     conda remove -n "$ENV_NAME" --all -y
 
-    echo "Environment $ENV_NAME removed."
+    # -e allows for interpretation of '\n'
+    echo -e "\nEnvironment $ENV_NAME removed."
 }
 
 # only add alias if command does not exist
