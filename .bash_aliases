@@ -114,12 +114,7 @@ alias R="R --no-save"
 ########
 # lofi #
 ########
-# NOTE: may need to upgrade yt-dlp
-# can use backports: ```sudo apt -t noble-backports install yt-dlp```
-# or add PPA: https://github.com/yt-dlp/yt-dlp/wiki/Installation#apt
-# ```sudo add-apt-repository ppa:tomtomtom/yt-dlp    # Add ppa repo to apt```
-# ```sudo apt update                                 # Update package list```
-# ```sudo apt install yt-dlp                         # Install yt-dlp```
+# NOTE: install yt-dlp using snap: sudo snap install --edge yt-dlp
 toggle_lofi() {
     # debug flag (shift removes flag from args so normal parsing still works)
     DEBUG=false
